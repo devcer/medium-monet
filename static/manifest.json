@@ -1,18 +1,25 @@
 {
-  "name": "chrome-extension-webpack",
-  "description": "My basic Chrome extension",
+  "name": "Medium Coil",
+  "description": "A browser addon to link your medium account to a payment pointer and accept micropayments",
   "version": "0.1.0",
   "manifest_version": 3,
   "background": {
-    "service_worker": "serviceWorker.js"
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["contentScript.js"]
+      "matches": [
+        "*://*.medium.com/*"
+      ],
+      "js": [
+        "contentScript.js"
+      ]
     }
   ],
-  "permissions": ["storage", "scripting"],
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true

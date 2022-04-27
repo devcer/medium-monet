@@ -1,22 +1,63 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="stylesheet" href="styles/popup.css">
-</head>
+    <link rel="stylesheet" href="styles/popup.css" />
+  </head>
 
-<body>
-  <div class="container">
-    <h1>Hello World!</h1>
+  <body>
+    <div class="container">
+      <h1>Medium Coil</h1>
+      <p>Link your medium with your payment pointer</p>
+      <form id="medium-form" class="options" name="time-form">
+        <!-- <div class="form-check">
+          <label>Your medium profile link</label>
+          <input
+            class="form-check-input"
+            type="text"
+            name="profile_url"
+            id="profile_url"
+          />
+        </div> -->
+        <div class="form-check">
+          <label
+            >Your medium token (Instructions
+            <a
+              href="https://github.com/Medium/medium-api-docs/blob/master/README.md#21-self-issued-access-tokens"
+              target="_blank"
+              >here</a
+            >)</label
+          >
+          <input
+            class="form-check-input"
+            type="text"
+            name="medium_token"
+            id="medium_token"
+          />
+        </div>
+        <div class="form-check">
+          <label
+            >Your payment pointer (Instructions
+            <a
+              href="https://help.coil.com/docs/monetize/wallets/uphold/index.html#set-up-your-account-to-receive-payments-from-coil"
+              target="_blank"
+              >here</a
+            >)</label
+          >
+          <input
+            class="form-check-input"
+            type="text"
+            name="payment_pointer"
+            id="payment_pointer"
+          />
+        </div>
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
 
-    <p>Edit <u>static/popup.html</u> to change this page!</p>
-
-    <button id="go-to-options" class="button" style="margin-top: 2rem;">Open options page</button>
-  </div>
-
-  <script src="popup.js"></script>
-</body>
+    <script src="popup.js"></script>
+  </body>
 </html>

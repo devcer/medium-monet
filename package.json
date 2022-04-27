@@ -1,5 +1,5 @@
 {
-  "name": "chrome-extension-webpack",
+  "name": "Medium-Coil",
   "version": "0.2.0",
   "description": "Get started with Chrome extensions development using webpack, Typescript, Sass, and more",
   "scripts": {
@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.16.5",
+    "firebase": "^9.6.11",
     "normalize.css": "^8.0.1"
   },
   "browserslist": "> 0.25%, not dead",
