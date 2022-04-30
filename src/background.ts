@@ -33,19 +33,23 @@ type USER_OBJECT = {
 
 const doesDataExist = async (mediumUrl: string): USER_OBJECT | null => {
   const pointersRef = collection(db, 'pointers');
-  const pointerQuery = query(
-    pointersRef,
-    where('username', '==', getUsernameFromUrl(mediumUrl)),
-  );
-  const querySnapshot = await getDocs(pointerQuery);
-  let userObject = null;
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-    if (doc.data().mediumUrl === mediumUrl) {
-      userObject = doc.data();
-    }
-  });
-  return userObject;
+  const username = getUsernameFromUrl(mediumUrl);
+  console.log('username', username);
+  const pointerQuery = query(pointersRef, where('username', '==', username));
+  try {
+    const querySnapshot = await getDocs(pointerQuery);
+    let userObject = null;
+    querySnapshot.forEach((doc) => {
+      console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+      if (doc.data().mediumUrl === mediumUrl) {
+        userObject = doc.data();
+      }
+    });
+    return userObject;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 const setPaymentPointer = (paymentPointer: string) => {

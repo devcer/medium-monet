@@ -26,6 +26,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 // const analytics = getAnalytics(app);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
@@ -44,6 +45,10 @@ const setPaymentPointer = (paymentPointer: string) => {
       },
     );
   });
+};
+
+const goToOptionsPage = () => {
+  chrome.runtime.openOptionsPage();
 };
 
 const getMediumAccountDetails = async (mediumToken: string) => {
@@ -85,7 +90,7 @@ const saveMediumAndPointerCredentials = async (
   const { id: userId, imageUrl, username, name, url: mediumUrl } = profileData;
   const documentJson = {
     imageUrl,
-    mediumToken: '',
+    mediumToken,
     mediumUrl,
     name,
     paymentPointer,
@@ -98,7 +103,7 @@ const saveMediumAndPointerCredentials = async (
     console.log(response);
     return response;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 
@@ -134,17 +139,8 @@ window.onload = async () => {
     //   // add meta data to the header
     // }
   });
-  // const statusText = document.getElementById("status");
-  // const pointerObject = await doesDataExist("https://medium.com/@isantoshv");
-  // if (pointerObject === null) {
-  //   // no pointer exists for the Url
-  //   statusText.textContent = "No pointer exists for the Url yet";
-  // } else {
-  //   // pointer exists for the url
-  //   // add meta data to the header
-  //   setPaymentPointer(pointerObject.paymentPointer);
-  // }
-  // chrome.tabs.query(tabQuery, callback);
+  const optionsButton = document.getElementById('options-button');
+  optionsButton.addEventListener('click', goToOptionsPage);
 };
 
 const handleMessage = async (request, sender, sendResponse) => {
