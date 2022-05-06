@@ -1,11 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore/lite';
+import { getFirestore } from 'firebase/firestore/lite';
+import { doesUserExist } from './utilities/doesUserExist';
 import { getUsernameFromUrl } from './utilities/getUsernameFromUrl';
 
 // TODO: Replace the following with your app's Firebase project configuration
@@ -22,35 +17,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-type USER_OBJECT = {
-  username: string;
-  mediumUrl: string;
-  paymentPointer: string;
-  imageUrl: string;
-  name: string;
-  userId: string;
-};
-
-const doesDataExist = async (mediumUrl: string): USER_OBJECT | null => {
-  const pointersRef = collection(db, 'pointers');
-  const username = getUsernameFromUrl(mediumUrl);
-  console.log('username', username);
-  const pointerQuery = query(pointersRef, where('username', '==', username));
-  try {
-    const querySnapshot = await getDocs(pointerQuery);
-    let userObject = null;
-    querySnapshot.forEach((doc) => {
-      console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-      if (doc.data().mediumUrl === mediumUrl) {
-        userObject = doc.data();
-      }
-    });
-    return userObject;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
+// type USER_OBJECT = {
+//   username: string;
+//   mediumUrl: string;
+//   paymentPointer: string;
+//   imageUrl: string;
+//   name: string;
+//   userId: string;
+// };
 
 const setPaymentPointer = (paymentPointer: string) => {
   console.log('Sent pointer data');
@@ -68,26 +42,14 @@ const setPaymentPointer = (paymentPointer: string) => {
   });
 };
 
-const getProfileUrl = (mediumUrl: string) => {
-  const pageUrlObject = new URL(mediumUrl);
-  const urlOrigin = pageUrlObject.origin;
-  const authorName =
-    urlOrigin !== 'https://medium.com'
-      ? pageUrlObject.host.split('.medium.com')[0]
-      : pageUrlObject.pathname.split('/')[1];
-  console.log(`getProfileUrl: https://medium.com/@${authorName}`);
-  return `https://medium.com/@${authorName}`;
-};
-
-const handleMessage = async (
-  request: { status: string; pageUrl: string | URL },
-  sender: any,
-  sendResponse: any,
-) => {
+const handleMessage = async (request: {
+  status: string;
+  pageUrl: string | URL;
+}) => {
   const { status, pageUrl } = request;
   if (status === 'ready' && pageUrl !== null) {
     console.log('ready');
-    const pointerObject = await doesDataExist(getProfileUrl(pageUrl));
+    const pointerObject = await doesUserExist(db, getUsernameFromUrl(pageUrl));
     console.log('pointerObject', JSON.stringify(pointerObject));
     if (pointerObject === null) {
       // no pointer exists for the Url

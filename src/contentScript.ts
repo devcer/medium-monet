@@ -18,8 +18,7 @@ const addMetaTagToHeader = (paymentPointer: string) => {
 // });
 
 const handleMessage = (
-  request: { type: any; paymentPointer: any },
-  sender: any,
+  request: { type: string; paymentPointer: string },
   sendResponse: (arg0: { response: string }) => void,
 ) => {
   console.log('handleMessage');

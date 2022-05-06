@@ -1,14 +1,10 @@
 import '../styles/popup.scss';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-  addDoc,
-} from 'firebase/firestore/lite';
+import { getFirestore, collection, addDoc } from 'firebase/firestore/lite';
+import { getUsernameFromUrl } from './utilities/getUsernameFromUrl';
+import { doesUserExist } from './utilities/doesUserExist';
+import { getMediumAccountDetails } from './services/medium.service';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -51,36 +47,6 @@ const goToOptionsPage = () => {
   chrome.runtime.openOptionsPage();
 };
 
-const getMediumAccountDetails = async (mediumToken: string) => {
-  const myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${mediumToken}`);
-
-  const requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-  };
-  try {
-    const response = await fetch(
-      'https://api.medium.com/v1/me',
-      requestOptions,
-    );
-    const responseJson = await response.json();
-    //{
-    //   "data": {
-    //     "id": "1c3b18d7ca15ed491c69815841fb686485fbf1383382c98c89d3f179fb48bd459",
-    //     "username": "isantoshv",
-    //     "name": "Santosh Viswanatham",
-    //     "url": "https://medium.com/@isantoshv",
-    //     "imageUrl": "https://cdn-images-1.medium.com/fit/c/400/400/1*0BIgfC-AxZeDeGSo9G3A3Q.jpeg"
-    //   }
-    // }
-    return responseJson && responseJson.data;
-  } catch (error) {
-    console.log(error);
-    console.log('Error');
-  }
-};
-
 const saveMediumAndPointerCredentials = async (
   mediumToken: string,
   paymentPointer: string,
@@ -107,54 +73,14 @@ const saveMediumAndPointerCredentials = async (
   }
 };
 
-const doesDataExist = async (mediumUrl = '') => {
-  const pointersRef = collection(db, 'pointers');
-  const pointerQuery = query(pointersRef, where('mediumUrl', '==', mediumUrl));
-  const querySnapshot = await getDocs(pointerQuery);
-  let userObject = null;
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-    if (doc.data().mediumUrl === mediumUrl) {
-      userObject = doc.data();
-    }
-  });
-  return userObject;
-};
-
-window.onload = async () => {
-  const mediumForm = document.getElementById('medium-form');
-  mediumForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    console.log('Submitting form');
-    const mediumToken = document.getElementById('medium_token').value;
-    const paymentPointer = document.getElementById('payment_pointer').value;
-    console.log('mediumToken', mediumToken);
-    console.log('paymentPointer', paymentPointer);
-    saveMediumAndPointerCredentials(mediumToken, paymentPointer);
-    // const isValidProfile = await validateMediumURLWithToken(
-    //   profileUrl,
-    //   mediumToken,
-    // );
-    // if (isValidProfile) {
-    //   // add meta data to the header
-    // }
-  });
-  const optionsButton = document.getElementById('options-button');
-  optionsButton.addEventListener('click', goToOptionsPage);
-};
-
-const handleMessage = async (request, sender, sendResponse) => {
+const handleMessage = async (request: {
+  status: string;
+  pageUrl: string | URL;
+}) => {
   if (request.status === 'ready' && request.pageUrl !== null) {
     console.log('ready');
-    const pageUrlObject = new URL(request.pageUrl);
-    const urlOrigin = pageUrlObject.origin;
-    const authorName =
-      urlOrigin !== 'https://medium.com'
-        ? pageUrlObject.host.split('.medium.com')[0]
-        : pageUrlObject.pathname.split('/')[1];
-    const pointerObject = await doesDataExist(
-      `https://medium.com/@${authorName}`,
-    );
+    const username = getUsernameFromUrl(request.pageUrl);
+    const pointerObject = await doesUserExist(db, username);
     if (pointerObject === null) {
       // no pointer exists for the Url
       // statusText.textContent = "No pointer exists for the Url yet";
@@ -168,3 +94,18 @@ const handleMessage = async (request, sender, sendResponse) => {
 };
 
 chrome.runtime.onMessage.addListener(handleMessage);
+
+window.onload = async () => {
+  const mediumForm = document.getElementById('medium-form');
+  mediumForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    console.log('Submitting form');
+    const mediumToken = document.getElementById('medium_token')?.value;
+    const paymentPointer = document.getElementById('payment_pointer')?.value;
+    console.log('mediumToken', mediumToken);
+    console.log('paymentPointer', paymentPointer);
+    saveMediumAndPointerCredentials(mediumToken, paymentPointer);
+  });
+  const optionsButton = document.getElementById('options-button');
+  optionsButton.addEventListener('click', goToOptionsPage);
+};
