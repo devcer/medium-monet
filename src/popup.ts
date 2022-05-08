@@ -75,6 +75,11 @@ const saveMediumAndPointerCredentials = async (
   }
 };
 
+/**
+ *
+ * @param request The request object
+ * @returns Promise
+ */
 const handleMessage = async (request: {
   status: string;
   pageUrl: string | URL;
@@ -97,7 +102,7 @@ const handleMessage = async (request: {
 
 window.onload = () => {
   const mediumForm = document.getElementById('medium-form');
-  mediumForm.addEventListener('submit', async (event) => {
+  mediumForm.addEventListener('submit', (event) => {
     event.preventDefault();
     console.log('Submitting form');
     const mediumToken = document.getElementById('medium_token')?.value;
