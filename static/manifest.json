@@ -8,18 +8,11 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://*.medium.com/*"
-      ],
-      "js": [
-        "contentScript.js"
-      ]
+      "matches": ["*://*.medium.com/*"],
+      "js": ["contentScript.js"]
     }
   ],
-  "permissions": [
-    "storage",
-    "scripting"
-  ],
+  "permissions": ["storage", "scripting"],
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true
