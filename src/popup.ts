@@ -55,7 +55,6 @@ const saveMediumAndPointerCredentials = async (
   const { id: userId, imageUrl, username, name, url: mediumUrl } = profileData;
   const documentJson = {
     imageUrl,
-    mediumToken,
     mediumUrl,
     name,
     paymentPointer,
