@@ -4,9 +4,10 @@ import { firebaseConfig } from './constants/firebase.config';
 import { doesUserExist } from './utilities/doesUserExist';
 import { getUsernameFromUrl } from './utilities/getUsernameFromUrl';
 
-// TODO: Replace the following with your app's Firebase project configuration
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
 // type USER_OBJECT = {
@@ -18,6 +19,10 @@ const db = getFirestore(app);
 //   userId: string;
 // };
 
+/**
+ *
+ * @param paymentPointer The payment pointer to set
+ */
 const setPaymentPointer = (paymentPointer: string) => {
   console.log('Sent pointer data');
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -34,6 +39,11 @@ const setPaymentPointer = (paymentPointer: string) => {
   });
 };
 
+/**
+ *
+ * @param request The request object
+ * @returns Promise
+ */
 const handleMessage = async (request: {
   status: string;
   pageUrl: string | URL;

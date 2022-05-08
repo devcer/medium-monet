@@ -6,13 +6,10 @@ import { getUsernameFromUrl } from './utilities/getUsernameFromUrl';
 import { doesUserExist } from './utilities/doesUserExist';
 import { getMediumAccountDetails } from './services/medium.service';
 import { firebaseConfig } from './constants/firebase.config';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// const analytics = getAnalytics(app);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
