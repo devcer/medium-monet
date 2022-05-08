@@ -1,6 +1,10 @@
 // Define your storage data here
 export interface Storage {} // eslint-disable-line
 
+/**
+ *
+ * @returns Promise
+ */
 export function getStorageData(): Promise<Storage> {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.get(null, (result) => {
@@ -13,6 +17,11 @@ export function getStorageData(): Promise<Storage> {
   });
 }
 
+/**
+ *
+ * @param data The data to set
+ * @returns Promise
+ */
 export function setStorageData(data: Storage): Promise<void> {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.set(data, () => {
@@ -25,6 +34,11 @@ export function setStorageData(data: Storage): Promise<void> {
   });
 }
 
+/**
+ *
+ * @param key The key to get
+ * @returns Promise
+ */
 export function getStorageItem<Key extends keyof Storage>(
   key: Key,
 ): Promise<Storage[Key]> {
@@ -39,6 +53,12 @@ export function getStorageItem<Key extends keyof Storage>(
   });
 }
 
+/**
+ *
+ * @param key The key to which value to be set
+ * @param value The value to set
+ * @returns Promise
+ */
 export function setStorageItem<Key extends keyof Storage>(
   key: Key,
   value: Storage[Key],
@@ -54,6 +74,10 @@ export function setStorageItem<Key extends keyof Storage>(
   });
 }
 
+/**
+ *
+ * @param defaults The defaults to set
+ */
 export async function initializeStorageWithDefaults(defaults: Storage) {
   const currentStorageData = await getStorageData();
   const newStorageData = Object.assign({}, defaults, currentStorageData);
