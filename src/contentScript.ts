@@ -1,7 +1,7 @@
-// const paymentPointer = "$ilp.uphold.com/wypi4eKYYYJw";
-// const mediumToken =
-//   "2882f8aa6a3615e291e3472ba845ceee855aa5780e33b7786a58a141607edb87c";
-
+/**
+ *
+ * @param paymentPointer The payment pointer to set
+ */
 const addMetaTagToHeader = (paymentPointer: string) => {
   console.log('addMetaTagToHeader');
   const metaTag = document.createElement('meta');
@@ -9,13 +9,6 @@ const addMetaTagToHeader = (paymentPointer: string) => {
   metaTag.setAttribute('content', paymentPointer);
   document.head.appendChild(metaTag);
 };
-
-// getMediumAccountDetails(mediumToken).then((data) => {
-//   console.log(data);
-//   if (data.url && window.location.href.includes(data.url)) {
-//     addMetaTagToHeader();
-//   }
-// });
 
 const handleMessage = (
   request: { type: string; paymentPointer: string },
@@ -38,12 +31,11 @@ const handleMessage = (
   }
 };
 
-chrome.runtime.onMessage.addListener(handleMessage);
-
 window.addEventListener('load', () => {
   console.log('on load');
   chrome.runtime.sendMessage({
     status: 'ready',
     pageUrl: window.location.href,
   });
+  chrome.runtime.onMessage.addListener(handleMessage);
 });

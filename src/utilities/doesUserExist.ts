@@ -6,6 +6,12 @@ import {
   where,
 } from 'firebase/firestore/lite';
 
+/**
+ *
+ * @param db The firestore instance
+ * @param username username of the user
+ * @returns
+ */
 export const doesUserExist = async (
   db: Firestore,
   username = '',

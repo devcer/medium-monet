@@ -1,3 +1,8 @@
+/**
+ *
+ * @param mediumToken The medium token to set
+ * @returns Promise
+ */
 export const getMediumAccountDetails = async (mediumToken: string) => {
   const myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${mediumToken}`);

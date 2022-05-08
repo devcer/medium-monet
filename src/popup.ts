@@ -5,20 +5,9 @@ import { getFirestore, collection, addDoc } from 'firebase/firestore/lite';
 import { getUsernameFromUrl } from './utilities/getUsernameFromUrl';
 import { doesUserExist } from './utilities/doesUserExist';
 import { getMediumAccountDetails } from './services/medium.service';
+import { firebaseConfig } from './constants/firebase.config';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_apiKey,
-  authDomain: process.env.FIREBASE_authDomain,
-  projectId: process.env.FIREBASE_projectId,
-  storageBucket: process.env.FIREBASE_storageBucket,
-  messagingSenderId: process.env.FIREBASE_messagingSenderId,
-  appId: process.env.FIREBASE_appId,
-  measurementId: process.env.FIREBASE_measurementId,
-};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -27,6 +16,10 @@ const app = initializeApp(firebaseConfig);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
+/**
+ *
+ * @param paymentPointer The payment pointer to set
+ */
 const setPaymentPointer = (paymentPointer: string) => {
   console.log('Sent pointer data');
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -43,10 +36,19 @@ const setPaymentPointer = (paymentPointer: string) => {
   });
 };
 
+/**
+ * Go to the options page
+ */
 const goToOptionsPage = () => {
   chrome.runtime.openOptionsPage();
 };
 
+/**
+ *
+ * @param mediumToken The medium token to set
+ * @param paymentPointer The payment pointer to set
+ * @returns Promise
+ */
 const saveMediumAndPointerCredentials = async (
   mediumToken: string,
   paymentPointer: string,
@@ -93,8 +95,6 @@ const handleMessage = async (request: {
   }
 };
 
-chrome.runtime.onMessage.addListener(handleMessage);
-
 window.onload = () => {
   const mediumForm = document.getElementById('medium-form');
   mediumForm.addEventListener('submit', async (event) => {
@@ -112,4 +112,5 @@ window.onload = () => {
   });
   const optionsButton = document.getElementById('options-button');
   optionsButton.addEventListener('click', goToOptionsPage);
+  chrome.runtime.onMessage.addListener(handleMessage);
 };
