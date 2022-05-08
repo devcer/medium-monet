@@ -95,7 +95,7 @@ const handleMessage = async (request: {
 
 chrome.runtime.onMessage.addListener(handleMessage);
 
-window.onload = async () => {
+window.onload = () => {
   const mediumForm = document.getElementById('medium-form');
   mediumForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -104,7 +104,11 @@ window.onload = async () => {
     const paymentPointer = document.getElementById('payment_pointer')?.value;
     console.log('mediumToken', mediumToken);
     console.log('paymentPointer', paymentPointer);
-    saveMediumAndPointerCredentials(mediumToken, paymentPointer);
+    saveMediumAndPointerCredentials(mediumToken, paymentPointer).then(
+      (data) => {
+        return data;
+      },
+    );
   });
   const optionsButton = document.getElementById('options-button');
   optionsButton.addEventListener('click', goToOptionsPage);
