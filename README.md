@@ -1,3 +1,11 @@
+<div align="center">
+
+[![Twitter Badge](https://img.shields.io/badge/-isantoshv-00acee?style=flat&logo=twitter&logoColor=white&link=https://twitter.com/isantoshv/)](https://www.twitter.com/isantoshv/)
+
+[![DeepSource](https://deepsource.io/gh/devcer/medium-coil.svg/?label=active+issues&show_trend=true&token=jZUIr29xqaI9pLR-9N-4kpcm)](https://deepsource.io/gh/devcer/medium-coil/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gh/devcer/medium-coil.svg/?label=resolved+issues&show_trend=true&token=jZUIr29xqaI9pLR-9N-4kpcm)](https://deepsource.io/gh/devcer/medium-coil/?ref=repository-badge)
+
+</div>
 # medium-coil
 
 A browser addon to link your medium account to a payment pointer and accept micropayments
