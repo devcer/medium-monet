@@ -6,6 +6,7 @@
 [![DeepSource](https://deepsource.io/gh/devcer/medium-coil.svg/?label=resolved+issues&show_trend=true&token=jZUIr29xqaI9pLR-9N-4kpcm)](https://deepsource.io/gh/devcer/medium-coil/?ref=repository-badge)
 
 </div>
+
 # medium-coil
 
 A browser addon to link your medium account to a payment pointer and accept micropayments
