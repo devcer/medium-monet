@@ -6,7 +6,6 @@
 export const getMediumAccountDetails = async (mediumToken: string) => {
   const myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${mediumToken}`);
-
   const requestOptions = {
     method: 'GET',
     headers: myHeaders,
