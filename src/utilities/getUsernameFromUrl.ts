@@ -3,7 +3,7 @@
  * @param url The url to set
  * @returns Promise
  */
-export const getUsernameFromUrl = (url: string): string => {
+export const getUsernameFromUrl = (url: string | URL): string => {
   const urlObj = new URL(url);
   const { host, pathname } = urlObj;
   if (host === 'medium.com') {

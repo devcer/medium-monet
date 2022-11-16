@@ -7,6 +7,23 @@ import { doesUserExist } from './utilities/doesUserExist';
 import { getMediumAccountDetails } from './services/medium.service';
 import { firebaseConfig } from './constants/firebase.config';
 
+// console.log(firebaseConfig);
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyBNiOYoTYyD2coVDGuhUkkBSZ0EmsOHGsI',
+
+//   authDomain: 'medoil.firebaseapp.com',
+
+//   projectId: 'medoil',
+
+//   storageBucket: 'medoil.appspot.com',
+
+//   messagingSenderId: '229686803893',
+
+//   appId: '1:229686803893:web:bf673231f745fe407fadfc',
+
+//   measurementId: 'G-9J8LCR50DW',
+// };
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
@@ -50,19 +67,26 @@ const saveMediumAndPointerCredentials = async (
   mediumToken: string,
   paymentPointer: string,
 ) => {
-  const profileData = await getMediumAccountDetails(mediumToken);
-
-  const { id: userId, imageUrl, username, name, url: mediumUrl } = profileData;
-  const documentJson = {
-    imageUrl,
-    mediumUrl,
-    name,
-    paymentPointer,
-    userId,
-    username,
-  };
-  console.log(documentJson);
   try {
+    const profileData = (await getMediumAccountDetails(mediumToken)) || {};
+
+    const {
+      id: userId,
+      imageUrl,
+      username,
+      name,
+      url: mediumUrl,
+    } = profileData;
+    const documentJson = {
+      imageUrl,
+      mediumUrl,
+      name,
+      paymentPointer,
+      userId,
+      username,
+    };
+    console.log(documentJson);
+
     const response = await addDoc(collection(db, 'pointers'), documentJson);
     console.log(response);
     return response;
@@ -76,20 +100,33 @@ const saveMediumAndPointerCredentials = async (
  * @param request The request object
  * @returns Promise
  */
-const handleMessage = async (request: {
-  status: string;
-  pageUrl: string | URL;
-}) => {
+const handleMessage = async (
+  request: {
+    status: string;
+    pageUrl: string | URL;
+  },
+  sender,
+  sendResponse: any,
+) => {
+  console.log('handleMessage popup.ts ', request);
   if (request.status === 'ready' && request.pageUrl !== null) {
-    console.log('ready');
+    console.log('ready popup');
     const username = getUsernameFromUrl(request.pageUrl);
-    const pointerObject = await doesUserExist(db, username);
+    const pointerObject = (await doesUserExist(db, username)) || {
+      paymentPointer: '',
+    };
     if (pointerObject === null) {
       // no pointer exists for the Url
       // statusText.textContent = "No pointer exists for the Url yet";
     } else {
       // pointer exists for the url
       // add meta data to the header
+      // const monetizedMessage = document.getElementById(
+      //   'web-monetized-post-message',
+      // );
+      // if (monetizedMessage) {
+      //   monetizedMessage.style.display = 'block';
+      // }
       setPaymentPointer(pointerObject.paymentPointer);
     }
     return pointerObject;
@@ -100,18 +137,20 @@ window.onload = () => {
   const mediumForm = document.getElementById('medium-form');
   mediumForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    console.log('Submitting form');
-    const mediumToken = document.getElementById('medium_token')?.value;
-    const paymentPointer = document.getElementById('payment_pointer')?.value;
+    const mediumToken: string = document.getElementById('medium_token')?.value;
+    const paymentPointer: string =
+      document.getElementById('payment_pointer')?.value;
     console.log('mediumToken', mediumToken);
     console.log('paymentPointer', paymentPointer);
     saveMediumAndPointerCredentials(mediumToken, paymentPointer).then(
       (data) => {
+        document.getElementById('message').textContent =
+          'Pointer saved successfully';
         return data;
       },
     );
   });
-  const optionsButton = document.getElementById('options-button');
-  optionsButton.addEventListener('click', goToOptionsPage);
+  // const optionsButton = document.getElementById('options-button');
+  // optionsButton.addEventListener('click', goToOptionsPage);
   chrome.runtime.onMessage.addListener(handleMessage);
 };

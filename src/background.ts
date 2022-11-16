@@ -41,6 +41,24 @@ const setPaymentPointer = (paymentPointer: string) => {
 
 /**
  *
+ */
+const setMonetizedMessage = () => {
+  console.log('Sent monetize data');
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(
+      tabs[0].id,
+      {
+        type: 'setMonetizedMessage',
+      },
+      function (response) {
+        console.log(response);
+      },
+    );
+  });
+};
+
+/**
+ *
  * @param request The request object
  * @returns Promise
  */
@@ -50,7 +68,7 @@ const handleMessage = async (request: {
 }) => {
   const { status, pageUrl } = request;
   if (status === 'ready' && pageUrl !== null) {
-    console.log('ready');
+    console.log('ready background');
     const pointerObject = await doesUserExist(db, getUsernameFromUrl(pageUrl));
     console.log('pointerObject', JSON.stringify(pointerObject));
     if (pointerObject === null) {
@@ -60,6 +78,7 @@ const handleMessage = async (request: {
       // pointer exists for the url
       // add meta data to the header
       setPaymentPointer(pointerObject.paymentPointer);
+      // setMonetizedMessage();
     }
     return pointerObject;
   }

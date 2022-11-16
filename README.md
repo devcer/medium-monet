@@ -200,6 +200,10 @@ You can edit the service worker at `src/serviceWorker.ts`.
 
 Read more about service workers [here](https://developer.chrome.com/docs/extensions/mv3/service_workers/).
 
+### Generating medium token
+
+- Follow the instructions [here](https://github.com/Medium/medium-api-docs/blob/master/README.md#21-self-issued-access-tokens)
+
 ## More resources
 
 - [Welcome to Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)

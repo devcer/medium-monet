@@ -11,7 +11,10 @@ export const getMediumAccountDetails = async (mediumToken: string) => {
     headers: myHeaders,
   };
   try {
-    const response = await fetch(process.env.MEDIUM_API_URL, requestOptions);
+    const response = await fetch(
+      `${process.env.MEDIUM_API_URL}me`,
+      requestOptions,
+    );
     const responseJson = await response.json();
     //{
     //   "data": {
