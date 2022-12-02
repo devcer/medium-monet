@@ -7,23 +7,6 @@ import { doesUserExist } from './utilities/doesUserExist';
 import { getMediumAccountDetails } from './services/medium.service';
 import { firebaseConfig } from './constants/firebase.config';
 
-// console.log(firebaseConfig);
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyBNiOYoTYyD2coVDGuhUkkBSZ0EmsOHGsI',
-
-//   authDomain: 'medoil.firebaseapp.com',
-
-//   projectId: 'medoil',
-
-//   storageBucket: 'medoil.appspot.com',
-
-//   messagingSenderId: '229686803893',
-
-//   appId: '1:229686803893:web:bf673231f745fe407fadfc',
-
-//   measurementId: 'G-9J8LCR50DW',
-// };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
@@ -53,6 +36,7 @@ const setPaymentPointer = (paymentPointer: string) => {
 /**
  * Go to the options page
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const goToOptionsPage = () => {
   chrome.runtime.openOptionsPage();
 };
@@ -105,7 +89,9 @@ const handleMessage = async (
     status: string;
     pageUrl: string | URL;
   },
-  sender,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  _sender: any,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   sendResponse: any,
 ) => {
   console.log('handleMessage popup.ts ', request);
