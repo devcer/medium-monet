@@ -7,23 +7,6 @@ import { doesUserExist } from './utilities/doesUserExist';
 import { getMediumAccountDetails } from './services/medium.service';
 import { firebaseConfig } from './constants/firebase.config';
 
-// console.log(firebaseConfig);
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyBNiOYoTYyD2coVDGuhUkkBSZ0EmsOHGsI',
-
-//   authDomain: 'medoil.firebaseapp.com',
-
-//   projectId: 'medoil',
-
-//   storageBucket: 'medoil.appspot.com',
-
-//   messagingSenderId: '229686803893',
-
-//   appId: '1:229686803893:web:bf673231f745fe407fadfc',
-
-//   measurementId: 'G-9J8LCR50DW',
-// };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
