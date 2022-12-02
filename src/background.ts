@@ -42,6 +42,7 @@ const setPaymentPointer = (paymentPointer: string) => {
 /**
  *
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const setMonetizedMessage = () => {
   console.log('Sent monetize data');
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {

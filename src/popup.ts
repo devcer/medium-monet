@@ -53,6 +53,7 @@ const setPaymentPointer = (paymentPointer: string) => {
 /**
  * Go to the options page
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const goToOptionsPage = () => {
   chrome.runtime.openOptionsPage();
 };
@@ -105,7 +106,9 @@ const handleMessage = async (
     status: string;
     pageUrl: string | URL;
   },
-  sender,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  _sender: any,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   sendResponse: any,
 ) => {
   console.log('handleMessage popup.ts ', request);

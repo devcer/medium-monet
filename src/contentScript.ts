@@ -23,6 +23,7 @@ const addMetaTagToHeader = (paymentPointer: string) => {
 const handleMessage = (
   request: { type: string; paymentPointer: string },
   sender,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sendResponse: any,
 ) => {
   console.log('handleMessage');
