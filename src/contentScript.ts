@@ -9,22 +9,13 @@ const addMetaTagToHeader = (paymentPointer: string) => {
   metaTag.setAttribute('name', 'monetization');
   metaTag.setAttribute('content', paymentPointer);
   console.log(metaTag);
-  // setTimeout(() => {
   document.head.appendChild(metaTag);
-  // document.body.appendChild(metaTag);
-  // document.getElementsByTagName('head')[0].appendChild(metaTag);
-  // // }, 3000);
-  // const p = document.createElement('p');
-  // p.textContent = 'This paragraph was added by a page script.';
-  // p.setAttribute('id', 'page-script-para');
-  // document.body.appendChild(p);
 };
 
 const handleMessage = (
   request: { type: string; paymentPointer: string },
-  sender,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sendResponse: any,
+  _sender: unknown,
+  sendResponse: unknown,
 ) => {
   console.log('handleMessage');
   const { type, paymentPointer } = request;

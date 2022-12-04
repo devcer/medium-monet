@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
 import { firebaseConfig } from './constants/firebase.config';
+import { POINTER_OBJECT } from './constants/types';
 import { doesUserExist } from './utilities/doesUserExist';
 import { getUsernameFromUrl } from './utilities/getUsernameFromUrl';
 
@@ -9,15 +10,6 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
-
-// type USER_OBJECT = {
-//   username: string;
-//   mediumUrl: string;
-//   paymentPointer: string;
-//   imageUrl: string;
-//   name: string;
-//   userId: string;
-// };
 
 /**
  *
@@ -41,25 +33,6 @@ const setPaymentPointer = (paymentPointer: string) => {
 
 /**
  *
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const setMonetizedMessage = () => {
-  console.log('Sent monetize data');
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(
-      tabs[0].id,
-      {
-        type: 'setMonetizedMessage',
-      },
-      function (response) {
-        console.log(response);
-      },
-    );
-  });
-};
-
-/**
- *
  * @param request The request object
  * @returns Promise
  */
@@ -70,7 +43,12 @@ const handleMessage = async (request: {
   const { status, pageUrl } = request;
   if (status === 'ready' && pageUrl !== null) {
     console.log('ready background');
-    const pointerObject = await doesUserExist(db, getUsernameFromUrl(pageUrl));
+    const pointerObject: POINTER_OBJECT = ((await doesUserExist(
+      db,
+      getUsernameFromUrl(pageUrl),
+    )) as POINTER_OBJECT) || {
+      paymentPointer: '',
+    };
     console.log('pointerObject', JSON.stringify(pointerObject));
     if (pointerObject === null) {
       // no pointer exists for the Url

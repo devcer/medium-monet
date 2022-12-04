@@ -6,6 +6,7 @@ import { getUsernameFromUrl } from './utilities/getUsernameFromUrl';
 import { doesUserExist } from './utilities/doesUserExist';
 import { getMediumAccountDetails } from './services/medium.service';
 import { firebaseConfig } from './constants/firebase.config';
+import { POINTER_OBJECT } from './constants/types';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -31,14 +32,6 @@ const setPaymentPointer = (paymentPointer: string) => {
       },
     );
   });
-};
-
-/**
- * Go to the options page
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const goToOptionsPage = () => {
-  chrome.runtime.openOptionsPage();
 };
 
 /**
@@ -84,21 +77,18 @@ const saveMediumAndPointerCredentials = async (
  * @param request The request object
  * @returns Promise
  */
-const handleMessage = async (
-  request: {
-    status: string;
-    pageUrl: string | URL;
-  },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  _sender: any,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  sendResponse: any,
-) => {
+const handleMessage = async (request: {
+  status: string;
+  pageUrl: string | URL;
+}) => {
   console.log('handleMessage popup.ts ', request);
   if (request.status === 'ready' && request.pageUrl !== null) {
     console.log('ready popup');
     const username = getUsernameFromUrl(request.pageUrl);
-    const pointerObject = (await doesUserExist(db, username)) || {
+    const pointerObject: POINTER_OBJECT = ((await doesUserExist(
+      db,
+      username,
+    )) as POINTER_OBJECT) || {
       paymentPointer: '',
     };
     if (pointerObject === null) {
@@ -107,12 +97,6 @@ const handleMessage = async (
     } else {
       // pointer exists for the url
       // add meta data to the header
-      // const monetizedMessage = document.getElementById(
-      //   'web-monetized-post-message',
-      // );
-      // if (monetizedMessage) {
-      //   monetizedMessage.style.display = 'block';
-      // }
       setPaymentPointer(pointerObject.paymentPointer);
     }
     return pointerObject;
@@ -123,9 +107,12 @@ window.onload = () => {
   const mediumForm = document.getElementById('medium-form');
   mediumForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    const mediumToken: string = document.getElementById('medium_token')?.value;
-    const paymentPointer: string =
-      document.getElementById('payment_pointer')?.value;
+    const mediumToken: string = (<HTMLInputElement>(
+      document.getElementById('medium_token')
+    ))?.value;
+    const paymentPointer: string = (<HTMLInputElement>(
+      document.getElementById('payment_pointer')
+    ))?.value;
     console.log('mediumToken', mediumToken);
     console.log('paymentPointer', paymentPointer);
     saveMediumAndPointerCredentials(mediumToken, paymentPointer).then(
@@ -136,7 +123,5 @@ window.onload = () => {
       },
     );
   });
-  // const optionsButton = document.getElementById('options-button');
-  // optionsButton.addEventListener('click', goToOptionsPage);
   chrome.runtime.onMessage.addListener(handleMessage);
 };
