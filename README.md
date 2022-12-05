@@ -33,14 +33,16 @@ If you need React support, please check this awesome boilerplate created by [Mic
 ### Installing and running
 
 1. Clone the repository
-2. Run `npm install`
-3. Run `npm run start` for development mode, `npm run build` for production build
-4. Add the extension to Chrome:
+2. Copy the `.env_example` file and rename it to `.env`
+3. Create a firebase app and setup firebase storage. Instructions [here](https://firebase.google.com/docs/storage/web/start). Copy the secrets to your `.env` file.
+4. Run `npm install`
+5. Run `npm run start` for development mode, `npm run build` for production build
+6. Add the extension to Chrome:
    1. Go to `chrome://extensions/`
    2. Enable the `Developer mode`
    3. Click on `Load unpacked`
    4. Choose the `dist` directory
-5. You are good to go! You can also pin the extension to the toolbar for easy access.
+7. You are good to go! You can also pin the extension to the toolbar for easy access.
 
 ### Project structure
 
