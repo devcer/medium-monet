@@ -44,6 +44,11 @@ If you need React support, please check this awesome boilerplate created by [Mic
    4. Choose the `dist` directory
 7. You are good to go! You can also pin the extension to the toolbar for easy access.
 
+### Working recording
+
+https://user-images.githubusercontent.com/3799600/205805209-c4a43213-41d7-45b4-8abb-e57e588d4042.mov
+
+
 ### Project structure
 
 All TypeScript files are placed in `src` directory. There are few files already prepared for you:
